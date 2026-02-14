@@ -9,59 +9,61 @@
     <script>
       var scale = 1;
       var maxScale = 5;
-      var growing = false;
 
       function startGrowing() {
         console.log("entered with scale " + scale);
 
         const yesButton = document.querySelector('.yes');
-        growing = true;
-        while (growing) {
-          scale = scale * 1.5;
-          if (scale > maxScale) {
-            scale = maxScale; yesButton.style.transform = 'scale(' + scale + ')';
-            break;
-          }
+        scale = scale * 1.1;
+        if (scale > maxScale) {
+          scale = maxScale;
         }
-      }
-
-      function stopGrowing() {
-        console.log("exited with scale " + scale);
-        const yesButton = document.querySelector('.yes');
-        scale = 1;
         yesButton.style.transform = 'scale(' + scale + ')';
       }
 
       function nohover() {
         console.log("hovered no button");
-        const noButton = document.querySelector(".no");
+        const noButton = document.querySelector('.no');
         // noButton.style.transform = 'translate(2em, 2em)';
-        var rect = noButton.getBoundingClientRect();
-        var innerWidth = window.innerWidth;
-        var innerHeight = window.innerHeight;
-        moveRandom();
+        var coords = getRandomCoordinates();
+        // var moveCommand = 'translate(' + (coords.x) + 'px, ' + (coords.y) + 'px)';
+        var animation = [
+          { left: "0%", top: "0%" },
+          { left: coords.x + "%", top: coords.y + "%" }
+        ];
+
+        console.log("moving no button: " + animation[1].left + ", " + animation[1].top);
+        // noButton.style.transform = moveCommand;
+        noButton.animate(animation,
+          {
+            duration: 500,
+            iterations: 1
+          }
+        )
       }
-      
-      function getRandomCoordinates(int innerWidth, int innerHeight) {
-        var x = Math.floor(Math.random() * innerWidth);
-        var y = Math.floor(Math.random() * innerHeight);
+
+      function getRandomCoordinates() {
+        // var x = Math.floor(Math.random() * window.innerWidth);
+        // var y = Math.floor(Math.random() * window.innerHeight);
+        var x = Math.floor(Math.random() * 100);
+        var y = Math.floor(Math.random() * 100);
         return { x: x, y: y };
       }
 
-      function moveRandom() {
-
-        var moveCommand = 'translate(' + (x) + 'px, ' + (y) + 'px)';
-        console.log("moving no button: " + moveCommand);
-        noButton.style.transform = moveCommand;
-      }
 
 
       document.addEventListener('DOMContentLoaded', function () {
         const yes = document.querySelector('.yes');
         if (!yes) return;
         yes.addEventListener('mouseenter', startGrowing);
-        yes.addEventListener('mouseleave', stopGrowing);
       });
+
+      document.addEventListener('DOMContentLoaded', function () {
+        const no = document.querySelector('.no');
+        if (!no) return;
+        no.addEventListener('mouseover', nohover);
+      });
+
     </script>
     <style>
       html,
@@ -97,14 +99,7 @@
         border-radius: 20px;
       }
 
-      /* 
-      .textdiv {
-        position: fixed;
-        top: 20%;
-      } */
-
       .main-text {
-        /* position: relative; */
         text-align: end;
         font-size: 3em;
         color: #330C15;
@@ -129,7 +124,10 @@
         width: 100%;
         display: flex;
         justify-content: center;
-        gap: 15em;
+        align-content: center;
+        height: 100%;
+        align-items: center;
+        gap: 4em;
       }
 
       .yes {
@@ -138,11 +136,6 @@
         border: none;
         z-index: 100;
       }
-
-      /* 
-      .yes:hover {
-        transform: scale(2);
-      } */
 
       .no {
         background-color: #FF6961;
@@ -162,7 +155,7 @@
 
         <div class="buttondiv">
           <button class="button yes">Yes!</button>
-          <button class="button no" onmouseover="nohover()">No!</button>
+          <button class="button no">No!</button>
         </div>
       </div>
     </div>
