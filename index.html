@@ -23,6 +23,11 @@
         yesButton.style.transform = 'scale(' + scale + ')';
       }
 
+      function showYesIFrame() {
+        var modal = document.getElementById("yesModal");
+        modal.style.display = "block";
+      }
+
       function nohover() {
         noHoverCounter++;
         console.log("hovered no button " + noHoverCounter + " time(s)");
@@ -33,12 +38,10 @@
         noButton.style.top = coords.y + "%";
 
         if (noHoverCounter >= 7) {
-          // alert("REEEEEEEEEEEEEEEEEEEE");
-          var modal = document.getElementById("myModal");
+          var modal = document.getElementById("noModal");
           modal.style.display = "block";
           noHoverCounter = 0;
         }
-
       }
 
       function getRandomCoordinates() {
@@ -56,8 +59,10 @@
         return { x: x / parentRect.width * 100, y: y / parentRect.height * 100 };
       }
 
-      function closeModal() {
-        var modal = document.getElementById('myModal');
+      function closeModal(caller) {
+        var modalId = caller === 'yes' ? "yesModal" : "noModal";
+        console.log("closing modal: " + modalId);
+        var modal = document.getElementById(modalId);
         modal.style.display = 'none';
       }
 
@@ -65,6 +70,7 @@
         const yes = document.querySelector('.yes');
         if (!yes) return;
         yes.addEventListener('mouseenter', startGrowing);
+        yes.addEventListener('click', showYesIFrame);
       });
 
       document.addEventListener('DOMContentLoaded', function () {
@@ -173,11 +179,11 @@
       }
 
       .modal-text {
-        color: white;
+        color: red;
         font-size: 2em;
       }
 
-      .close{
+      .close {
         position: absolute;
         top: 20px;
         right: 35px;
@@ -192,10 +198,17 @@
 
   <body>
     <div class="backdrop">
-      <div id="myModal" class="modal">
-        <span class="close" onclick="closeModal()">&times;</span>
+      <div id="noModal" class="modal">
+        <span class="close" onclick="closeModal('no')">&times;</span>
         <p class="modal-text">REEEEEEEEEEEEEEEEEEEE</p>
       </div>
+      <div id="yesModal" class="modal">
+        <iframe src="https://giphy.com/embed/88vPWe2apR1PqQpeIC" width="480" height="480" style=""
+          frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+        <span class="close" onclick="closeModal('yes')">&times;</span>
+
+      </div>
+
       <div class="main-container">
         <p class="main-text"> Tzina, will you be my valentine?</p>
         <p class="emojis">&#128152; &#128159; &#128143; &#127801;</p>
