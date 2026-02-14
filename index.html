@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Agbalumo&display=swap" rel="stylesheet">
+    <script>
+      var scale = 1;
+      var maxScale = 5;
+      var growing = false;
+
+      function startGrowing() {
+        console.log("entered with scale " + scale);
+
+        const yesButton = document.querySelector('.yes');
+        growing = true;
+        while (growing) {
+          scale = scale * 1.5;
+          if (scale > maxScale) {
+            scale = maxScale; yesButton.style.transform = 'scale(' + scale + ')';
+            break;
+          }
+        }
+      }
+
+      function stopGrowing() {
+        console.log("exited with scale " + scale);
+        const yesButton = document.querySelector('.yes');
+        scale = 1;
+        yesButton.style.transform = 'scale(' + scale + ')';
+      }
+
+      function nohover() {
+        console.log("hovered no button");
+        const noButton = document.querySelector(".no");
+        // noButton.style.transform = 'translate(2em, 2em)';
+        var rect = noButton.getBoundingClientRect();
+        var innerWidth = window.innerWidth;
+        var innerHeight = window.innerHeight;
+        moveRandom();
+      }
+      
+      function getRandomCoordinates(int innerWidth, int innerHeight) {
+        var x = Math.floor(Math.random() * innerWidth);
+        var y = Math.floor(Math.random() * innerHeight);
+        return { x: x, y: y };
+      }
+
+      function moveRandom() {
+
+        var moveCommand = 'translate(' + (x) + 'px, ' + (y) + 'px)';
+        console.log("moving no button: " + moveCommand);
+        noButton.style.transform = moveCommand;
+      }
+
+
+      document.addEventListener('DOMContentLoaded', function () {
+        const yes = document.querySelector('.yes');
+        if (!yes) return;
+        yes.addEventListener('mouseenter', startGrowing);
+        yes.addEventListener('mouseleave', stopGrowing);
+      });
+    </script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: #FFC5D3
+      }
+
+      .backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .main-container {
+        position: fixed;
+        display: grid;
+        grid-template-rows: 1fr 1fr 6fr;
+        justify-content: center;
+        align-items: center;
+        width: 60%;
+        height: 60%;
+        top: 20%;
+        left: 20%;
+        text-align: center;
+        background-color: #FFF1E7;
+        border-radius: 20px;
+      }
+
+      /* 
+      .textdiv {
+        position: fixed;
+        top: 20%;
+      } */
+
+      .main-text {
+        /* position: relative; */
+        text-align: end;
+        font-size: 3em;
+        color: #330C15;
+        font-family: 'Agbalumo';
+      }
+
+      .emojis {
+        position: relative;
+        font-size: 2em;
+      }
+
+      .button {
+        width: 5em;
+        height: 2em;
+        border-radius: 10px;
+        font-size: 1em;
+        color: #330C15;
+        font-family: 'Agbalumo';
+      }
+
+      .buttondiv {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        gap: 15em;
+      }
+
+      .yes {
+        background-color: #7ABD7E;
+        color: white;
+        border: none;
+        z-index: 100;
+      }
+
+      /* 
+      .yes:hover {
+        transform: scale(2);
+      } */
+
+      .no {
+        background-color: #FF6961;
+        color: white;
+        border: none;
+        z-index: 99;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <div class="backdrop">
+      <div class="main-container">
+        <p class="main-text"> Tzina, will you be my valentine?</p>
+        <p class="emojis">&#128152; &#128159; &#128143; &#127801;</p>
+
+        <div class="buttondiv">
+          <button class="button yes">Yes!</button>
+          <button class="button no" onmouseover="nohover()">No!</button>
+        </div>
+      </div>
+    </div>
+  </body>
+
+</html>
