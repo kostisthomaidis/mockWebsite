@@ -10,6 +10,8 @@
       var scale = 1;
       var maxScale = 5;
 
+      var noHoverCounter = 0;
+
       function startGrowing() {
         console.log("entered with scale " + scale);
 
@@ -22,35 +24,42 @@
       }
 
       function nohover() {
-        console.log("hovered no button");
+        noHoverCounter++;
+        console.log("hovered no button " + noHoverCounter + " time(s)");
         const noButton = document.querySelector('.no');
-        // noButton.style.transform = 'translate(2em, 2em)';
         var coords = getRandomCoordinates();
-        // var moveCommand = 'translate(' + (coords.x) + 'px, ' + (coords.y) + 'px)';
-        var animation = [
-          { left: "0%", top: "0%" },
-          { left: coords.x + "%", top: coords.y + "%" }
-        ];
+        console.log("moving no button: " + coords.x + ", " + coords.y);
+        noButton.style.left = coords.x + "%";
+        noButton.style.top = coords.y + "%";
 
-        console.log("moving no button: " + animation[1].left + ", " + animation[1].top);
-        // noButton.style.transform = moveCommand;
-        noButton.animate(animation,
-          {
-            duration: 500,
-            iterations: 1
-          }
-        )
+        if (noHoverCounter >= 7) {
+          // alert("REEEEEEEEEEEEEEEEEEEE");
+          var modal = document.getElementById("myModal");
+          modal.style.display = "block";
+          noHoverCounter = 0;
+        }
+
       }
 
       function getRandomCoordinates() {
-        // var x = Math.floor(Math.random() * window.innerWidth);
-        // var y = Math.floor(Math.random() * window.innerHeight);
-        var x = Math.floor(Math.random() * 100);
-        var y = Math.floor(Math.random() * 100);
-        return { x: x, y: y };
+        const noButton = document.querySelector('.no');
+        var noButtonRect = noButton.getBoundingClientRect();
+
+        const parent = document.querySelector('.buttondiv');
+        var parentRect = parent.getBoundingClientRect();
+
+        var limitX = Math.max(0, parentRect.width - noButtonRect.width);
+        var limitY = Math.max(0, parentRect.height - noButtonRect.height);
+
+        var x = Math.floor(Math.random() * limitX);
+        var y = Math.floor(Math.random() * limitY);
+        return { x: x / parentRect.width * 100, y: y / parentRect.height * 100 };
       }
 
-
+      function closeModal() {
+        var modal = document.getElementById('myModal');
+        modal.style.display = 'none';
+      }
 
       document.addEventListener('DOMContentLoaded', function () {
         const yes = document.querySelector('.yes');
@@ -84,6 +93,11 @@
         height: 100%;
       }
 
+      p {
+        font-family: 'Agbalumo';
+
+      }
+
       .main-container {
         position: fixed;
         display: grid;
@@ -103,7 +117,6 @@
         text-align: end;
         font-size: 3em;
         color: #330C15;
-        font-family: 'Agbalumo';
       }
 
       .emojis {
@@ -117,17 +130,15 @@
         border-radius: 10px;
         font-size: 1em;
         color: #330C15;
-        font-family: 'Agbalumo';
+        /* font-family: 'Agbalumo'; */
+        top: 60%;
+        position: absolute;
       }
 
       .buttondiv {
         width: 100%;
-        display: flex;
-        justify-content: center;
-        align-content: center;
         height: 100%;
-        align-items: center;
-        gap: 4em;
+        position: relative;
       }
 
       .yes {
@@ -135,6 +146,7 @@
         color: white;
         border: none;
         z-index: 100;
+        left: 40%;
       }
 
       .no {
@@ -142,6 +154,37 @@
         color: white;
         border: none;
         z-index: 99;
+        left: 60%;
+        transition: all 0.5s ease;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        text-align: center;
+        text-justify: center;
+        z-index: 200;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.9);
+      }
+
+      .modal-text {
+        color: white;
+        font-size: 2em;
+      }
+
+      .close{
+        position: absolute;
+        top: 20px;
+        right: 35px;
+        color: #fff;
+        font-size: 3em;
+        font-weight: bold;
+        cursor: pointer;
       }
 
     </style>
@@ -149,6 +192,10 @@
 
   <body>
     <div class="backdrop">
+      <div id="myModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <p class="modal-text">REEEEEEEEEEEEEEEEEEEE</p>
+      </div>
       <div class="main-container">
         <p class="main-text"> Tzina, will you be my valentine?</p>
         <p class="emojis">&#128152; &#128159; &#128143; &#127801;</p>
